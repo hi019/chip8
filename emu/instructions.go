@@ -157,7 +157,7 @@ var OP = instructionMap{
 		vy := (opcode & 0x00F0) >> 4
 		height := uint8(opcode & 0x000F)
 
-		xPos := c.Registers[vx] % constants.VideoHeight
+		xPos := c.Registers[vx] % constants.VideoWidth
 		yPos := c.Registers[vy] % constants.VideoHeight
 
 		c.Registers[0xF] = 0

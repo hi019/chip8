@@ -14,7 +14,7 @@ func main() {
 	c.Init()
 	//videoScale := 10
 
-	if err := c.LoadROM("./test_opcode.ch8"); err != nil {
+	if err := c.LoadROM("./IBM Logo.ch8"); err != nil {
 		log.Fatalln(err)
 	}
 
