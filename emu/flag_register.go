@@ -1,4 +1,4 @@
-package main
+package emu
 
 // FlagRegister values are effectively the upper 4 bits of a registry value but represented as boolean's for ergonomics
 //     ┌-> Carry
@@ -10,14 +10,14 @@ package main
 //    └-> Half Carry
 type FlagRegister struct {
 	// set to true if the result of the operation is equal to 0
-	zero bool
+	Zero bool
 	// set to true if the operation was a subtraction.
-	subtract bool
+	Subtract bool
 	// set to true if there is an overflow from the lower nibble (a.k.a the lower four bits) to the upper nibble
 	// (a.k.a the upper four bits)
-	halfCarry bool
+	HalfCarry bool
 	// set to true if the operation resulted in an overflow
-	carry bool
+	Carry bool
 }
 
 const (
@@ -32,19 +32,19 @@ const (
 // last is 0)
 func (f *FlagRegister) ToUint8() uint8 {
 	// 1000 0000
-	if f.zero {
+	if f.Zero {
 		return 1 << ZeroFlagBytePosition
 	}
 	// 0100 0000
-	if f.subtract {
+	if f.Subtract {
 		return 1 << SubtractFlagBytePosition
 	}
 	// 0010 0000
-	if f.halfCarry {
+	if f.HalfCarry {
 		return 1 << HalfCarryFlagBytePosition
 	}
 	// 0001 0000
-	if f.carry {
+	if f.Carry {
 		return 1 << CarryFlagBytePosition
 	}
 	return uint8(0)
@@ -54,18 +54,18 @@ func (f *FlagRegister) ToUint8() uint8 {
 func (f *FlagRegister) ParseUint8(val uint8) {
 	// 1000 0000
 	if (val >> ZeroFlagBytePosition & 0b1) != 0 {
-		f.zero = true
+		f.Zero = true
 	}
 	// 0100 0000
 	if (val >> SubtractFlagBytePosition & 0b1) != 0 {
-		f.subtract = true
+		f.Subtract = true
 	}
 	// 0010 0000
 	if (val >> HalfCarryFlagBytePosition & 0b1) != 0 {
-		f.halfCarry = true
+		f.HalfCarry = true
 	}
 	// 0001 0000
 	if (val >> CarryFlagBytePosition & 0b1) != 0 {
-		f.carry = true
+		f.Carry = true
 	}
 }
