@@ -14,7 +14,7 @@ func main() {
 	c.Init()
 	//videoScale := 10
 
-	if err := c.LoadROM("./c8_test.c8"); err != nil {
+	if err := c.LoadROM("./test_opcode.ch8"); err != nil {
 		log.Fatalln(err)
 	}
 
@@ -22,7 +22,7 @@ func main() {
 	renderer.SetImgFunc(func() image.Image {
 		c.Cycle()
 
-		img := image.NewGray(image.Rect(constants.VideoWidth, constants.VideoHeight, 0, 0))
+		img := image.NewGray(image.Rect(0, 0, constants.VideoWidth, constants.VideoHeight))
 
 		for i, u := range c.Video {
 			img.Pix[i] = uint8(u)
@@ -30,7 +30,7 @@ func main() {
 		return img
 	})
 
-	if err := ren.Start(1200, 500); err != nil {
+	if err := ren.Start(640, 480); err != nil {
 		log.Fatalln(err)
 	}
 

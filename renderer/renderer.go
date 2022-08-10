@@ -29,12 +29,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 320, 240
+	return 640, 480
 }
 
 func (g *Game) Start(width, height int) error {
 	ebiten.SetWindowSize(width, height)
-	ebiten.SetWindowTitle("Hello, World!")
+	ebiten.SetWindowTitle("Chip8")
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		return err
 	}

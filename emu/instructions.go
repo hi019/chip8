@@ -65,9 +65,9 @@ var OP0 = instructionMap{
 		c.Video = [constants.VideoHeight * constants.VideoWidth]uint32{}
 	},
 	// RET (0x00EE)
-	0xE: func(_ uint16, c *CPU) {
-		c.PC--
-		c.PC = c.Stack[c.PC]
+	0xE: func(opcode uint16, c *CPU) {
+		c.SP--
+		c.PC = c.Stack[c.SP]
 	},
 }
 
@@ -80,7 +80,7 @@ var OP = instructionMap{
 	// CALL (2nnn)
 	0x2: func(opcode uint16, c *CPU) {
 		address := opcode & 0x0FFF
-		c.Stack[c.SP] = address
+		c.Stack[c.SP] = c.PC
 		c.SP++
 		c.PC = address
 	},
