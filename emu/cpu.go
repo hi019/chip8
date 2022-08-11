@@ -1,11 +1,8 @@
 package emu
 
 import (
-	"fmt"
 	"io"
-	"log"
 	"math/rand"
-	"os"
 
 	"emu/constants"
 )
@@ -14,7 +11,7 @@ type CPU struct {
 	Registers [16]byte
 	Memory    [4096]byte
 	Key       [16]byte
-	Video     [constants.VideoHeight * constants.VideoWidth]uint32
+	Video     [constants.VideoHeight * constants.VideoWidth]byte
 	Opcode    uint16
 	// the program counter, which tells us what instruction the cpu is currently executing
 	PC uint16
@@ -27,7 +24,7 @@ type CPU struct {
 	ST byte
 	// index
 	I      uint16
-	Keypad [16]uint8
+	Keypad [16]byte
 }
 
 func (c *CPU) Init() {
@@ -39,15 +36,10 @@ func (c *CPU) Init() {
 	}
 }
 
-func (c *CPU) LoadROM(filename string) error {
-	f, err := os.Open(filename)
-	if err != nil {
-		return err
-	}
-
+func (c *CPU) LoadROM(r io.Reader) error {
 	for i := 0; true; i++ {
 		// rom starts at 0x200
-		_, err := f.Read(c.Memory[0x200:])
+		_, err := r.Read(c.Memory[0x200:])
 		if err != nil {
 			if err == io.EOF {
 				break
@@ -64,17 +56,10 @@ func (c *CPU) Random() uint8 {
 }
 
 func (c *CPU) Cycle() {
-	//if int(c.PC) == len(c.Memory) {
-	//	c.PC = 0x200
-	//}
-
 	// fetch
 	opcode := (uint16(c.Memory[c.PC]) << 8) | uint16(c.Memory[c.PC+1])
 	// increment pc
 	c.PC += 2
-
-	inHex := fmt.Sprintf("%x", opcode)
-	log.Println(inHex)
 
 	// decode and execute
 	c.Opcode = opcode

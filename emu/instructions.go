@@ -52,7 +52,7 @@ var MainMap = instructionMainMap{
 		return OP[opcode&0xF000>>12]
 	},
 	0xE: func(opcode uint16) instructionHandler {
-		return OPE[opcode&0x3]
+		return OPE[opcode&0xFF]
 	},
 	0xF: func(opcode uint16) instructionHandler {
 		return OPE[opcode&0xFF]
@@ -62,7 +62,7 @@ var MainMap = instructionMainMap{
 var OP0 = instructionMap{
 	// CLS (0x00E0)
 	0x0: func(_ uint16, c *CPU) {
-		c.Video = [constants.VideoHeight * constants.VideoWidth]uint32{}
+		c.Video = [constants.VideoHeight * constants.VideoWidth]byte{}
 	},
 	// RET (0x00EE)
 	0xE: func(opcode uint16, c *CPU) {
@@ -167,14 +167,18 @@ var OP = instructionMap{
 			for col := 0; col < 8; col++ {
 				spritePixel := spriteByte & (0x80 >> col)
 				vidIndex := (int(yPos)+row)*constants.VideoWidth + (int(xPos) + col)
+
+				//log.Println(xPos, yPos)
+
 				screenPixel := c.Video[vidIndex]
 
 				if spritePixel > 0 {
-					if screenPixel == 0xFFFFFFFF {
+					if screenPixel == 0xFF {
+						c.Video[vidIndex] = 0
 						c.Registers[0xF] = 1
+					} else {
+						c.Video[vidIndex] = 0xFF
 					}
-
-					c.Video[vidIndex] ^= 0xFFFFFFFF
 				}
 			}
 		}
