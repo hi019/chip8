@@ -17,7 +17,7 @@ func main() {
 	c := emu.CPU{}
 	c.Init()
 
-	f, err := assets.Open("assets/roms/PONG")
+	f, err := assets.Open("assets/roms/PONG2")
 	if err != nil {
 		log.Fatalln(err)
 	}
