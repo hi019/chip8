@@ -168,7 +168,9 @@ var OP = instructionMap{
 				spritePixel := spriteByte & (0x80 >> col)
 				vidIndex := (int(yPos)+row)*constants.VideoWidth + (int(xPos) + col)
 
-				//log.Println(xPos, yPos)
+				if vidIndex >= len(c.Video) {
+					break
+				}
 
 				screenPixel := c.Video[vidIndex]
 

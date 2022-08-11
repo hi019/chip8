@@ -43,7 +43,7 @@ func main() {
 		return img
 	})
 
-	if err := ren.Start(640, 480); err != nil {
+	if err := ren.Start(640, 320); err != nil {
 		log.Fatalln(err)
 	}
 
